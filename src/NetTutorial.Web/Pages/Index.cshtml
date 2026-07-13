@@ -1,0 +1,50 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "ホーム";
+}
+
+<section class="hero">
+    <p class="eyebrow">Build with .NET</p>
+    <h1>.NET Tutorial</h1>
+    <p class="lede">
+        ソリューション構成・C# の基本構文・ASP.NET Core の仕組みを、
+        動くアプリの中で学べる学習用プロジェクトです。
+    </p>
+    <div class="cta-row">
+        <a class="btn btn-primary" asp-page="/Lessons/Index">レッスンを見る</a>
+        <a class="btn btn-ghost" asp-page="/Structure/Index">構成ガイドへ</a>
+    </div>
+</section>
+
+<section class="section">
+    <h2>このアプリで学べること</h2>
+    <p class="section-lead">画面を見るだけでなく、ソースコード自体が教材になっています。</p>
+    <div class="feature-grid">
+        <article class="feature">
+            <h3>.NET の全体像</h3>
+            <p>ランタイム・SDK・言語の関係や、ビルド〜実行の流れを整理します。</p>
+        </article>
+        <article class="feature">
+            <h3>プロジェクト構成</h3>
+            <p>ソリューション、.csproj、Pages、クラスライブラリの役割分担を体験します。</p>
+        </article>
+        <article class="feature">
+            <h3>C# の基本構文</h3>
+            <p>変数・制御構文・クラス・LINQ・async/await をコード例付きで確認できます。</p>
+        </article>
+        <article class="feature">
+            <h3>ASP.NET Core</h3>
+            <p>Program.cs、DI、ミドルウェア、Razor Pages の対応関係を理解します。</p>
+        </article>
+    </div>
+</section>
+
+<section class="section highlight">
+    <div>
+        <h2>現在のレッスン数</h2>
+        <p class="stat">@Model.LessonCount <span>件</span></p>
+        <p>データはデータベースではなく、クラスライブラリ（Core）内のサービスが提供しています。</p>
+    </div>
+    <a class="btn btn-primary" asp-page="/Demo/Index">Greeter デモを試す</a>
+</section>

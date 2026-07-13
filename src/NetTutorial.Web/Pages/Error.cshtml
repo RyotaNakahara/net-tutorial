@@ -1,0 +1,25 @@
+﻿@page
+@model ErrorModel
+@{
+    ViewData["Title"] = "エラー";
+}
+
+<section class="page-header">
+    <h1>エラーが発生しました</h1>
+    <p>リクエストの処理中に問題が起きました。</p>
+</section>
+
+@if (Model.ShowRequestId)
+{
+    <p>
+        <strong>Request ID:</strong> <code>@Model.RequestId</code>
+    </p>
+}
+
+<section class="section">
+    <h2>開発モードについて</h2>
+    <p>
+        開発環境では詳細なエラー情報が表示されます。
+        本番環境では <code>ASPNETCORE_ENVIRONMENT</code> を <code>Development</code> にしないでください。
+    </p>
+</section>

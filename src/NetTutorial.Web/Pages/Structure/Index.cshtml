@@ -1,0 +1,52 @@
+@page
+@model NetTutorial.Web.Pages.Structure.IndexModel
+@{
+    ViewData["Title"] = "構成ガイド";
+}
+
+<section class="page-header">
+    <h1>ソリューション構成ガイド</h1>
+    <p>このリポジトリ自体が教材です。各フォルダ・ファイルが何のためにあるかを把握しましょう。</p>
+</section>
+
+<section class="section">
+    <pre class="tree" aria-label="プロジェクトツリー">
+NetTutorial.sln
+└── src/
+    ├── NetTutorial.Core/          ← クラスライブラリ
+    │   ├── Models/
+    │   ├── Services/
+    │   └── Demos/
+    └── NetTutorial.Web/           ← Razor Pages Web アプリ
+        ├── Pages/
+        ├── wwwroot/
+        ├── Program.cs
+        └── appsettings.json
+    </pre>
+</section>
+
+<section class="section">
+    <h2>ファイルと役割</h2>
+    <div class="structure-list">
+        @foreach (var item in Model.Items)
+        {
+            <article class="structure-item">
+                <code>@item.Path</code>
+                <p>@item.Description</p>
+            </article>
+        }
+    </div>
+</section>
+
+<section class="section highlight">
+    <div>
+        <h2>リクエストの流れ</h2>
+        <ol class="flow">
+            <li>ブラウザが URL にアクセスする</li>
+            <li><code>Program.cs</code> のミドルウェアを通過する</li>
+            <li>対応する PageModel（例: <code>Lessons/Details.cshtml.cs</code>）が動く</li>
+            <li>サービス（Core の <code>LessonService</code>）からデータを取得する</li>
+            <li>Razor（<code>.cshtml</code>）が HTML を生成して返す</li>
+        </ol>
+    </div>
+</section>

@@ -1,0 +1,40 @@
+@page
+@model NetTutorial.Web.Pages.Lessons.IndexModel
+@{
+    ViewData["Title"] = "レッスン一覧";
+}
+
+<section class="page-header">
+    <h1>レッスン一覧</h1>
+    <p>カテゴリで絞り込みながら、.NET / C# の基礎を順番に学べます。</p>
+</section>
+
+<div class="filter-bar">
+    <a class="chip @(string.IsNullOrEmpty(Model.SelectedCategory) ? "is-active" : "")"
+       asp-page="./Index">すべて</a>
+    @foreach (LessonCategory category in Enum.GetValues<LessonCategory>())
+    {
+        <a class="chip @(string.Equals(Model.SelectedCategory, category.ToString(), StringComparison.OrdinalIgnoreCase) ? "is-active" : "")"
+           asp-page="./Index"
+           asp-route-category="@category">@IndexModel.CategoryLabel(category)</a>
+    }
+</div>
+
+<div class="lesson-list">
+    @foreach (var lesson in Model.Lessons)
+    {
+        <a class="lesson-item" asp-page="./Details" asp-route-id="@lesson.Id">
+            <div class="lesson-meta">
+                <span class="badge">@IndexModel.CategoryLabel(lesson.Category)</span>
+                <span class="order">#@lesson.Order</span>
+            </div>
+            <h2>@lesson.Title</h2>
+            <p>@lesson.Summary</p>
+        </a>
+    }
+</div>
+
+@if (Model.Lessons.Count == 0)
+{
+    <p class="empty">該当するレッスンがありません。</p>
+}

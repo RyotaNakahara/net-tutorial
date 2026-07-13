@@ -1,0 +1,72 @@
+@page "/Lessons/{id}"
+@model NetTutorial.Web.Pages.Lessons.DetailsModel
+@{
+    ViewData["Title"] = Model.Lesson?.Title ?? "レッスン";
+    var lesson = Model.Lesson!;
+}
+
+<article class="lesson-detail">
+    <header class="page-header">
+        <p class="eyebrow">@IndexModel.CategoryLabel(lesson.Category) · #@lesson.Order</p>
+        <h1>@lesson.Title</h1>
+        <p>@lesson.Summary</p>
+    </header>
+
+    @if (lesson.KeyPoints.Count > 0)
+    {
+        <section class="keypoints">
+            <h2>ポイント</h2>
+            <ul>
+                @foreach (var point in lesson.KeyPoints)
+                {
+                    <li>@point</li>
+                }
+            </ul>
+        </section>
+    }
+
+    <section class="lesson-body">
+        @Html.Raw(Model.ContentHtml)
+    </section>
+
+    @if (lesson.CodeSamples.Count > 0)
+    {
+        <section class="samples">
+            <h2>コード例</h2>
+            @foreach (var sample in lesson.CodeSamples)
+            {
+                <figure class="sample">
+                    <figcaption>
+                        <strong>@sample.Title</strong>
+                        <span class="lang">@sample.Language</span>
+                    </figcaption>
+                    <pre class="code-block"><code>@sample.Code.Trim()</code></pre>
+                    @if (!string.IsNullOrWhiteSpace(sample.Explanation))
+                    {
+                        <p class="sample-note">@sample.Explanation</p>
+                    }
+                </figure>
+            }
+        </section>
+    }
+
+    <nav class="lesson-nav">
+        @if (Model.Previous is not null)
+        {
+            <a asp-page="./Details" asp-route-id="@Model.Previous.Id">← @Model.Previous.Title</a>
+        }
+        else
+        {
+            <span></span>
+        }
+        <a asp-page="./Index">一覧へ戻る</a>
+        @if (Model.Next is not null)
+        {
+            <a asp-page="./Details" asp-route-id="@Model.Next.Id">@Model.Next.Title →</a>
+        }
+        else
+        {
+            <span></span>
+        }
+    </nav>
+</article>

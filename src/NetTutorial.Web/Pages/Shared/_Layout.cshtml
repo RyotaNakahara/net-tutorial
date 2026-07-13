@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - NetTutorial</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="app-shell">
+        <header class="site-header">
+            <a class="brand" asp-page="/Index">
+                <span class="brand-mark">.NET</span>
+                <span class="brand-text">Net<span>Tutorial</span></span>
+            </a>
+            <nav class="site-nav">
+                <a asp-page="/Index">ホーム</a>
+                <a asp-page="/Lessons/Index">レッスン</a>
+                <a asp-page="/Structure/Index">構成ガイド</a>
+                <a asp-page="/Demo/Index">デモ</a>
+            </nav>
+        </header>
+
+        <main class="site-main">
+            @RenderBody()
+        </main>
+
+        <footer class="site-footer">
+            <p>NetTutorial — powered by .NET · 基本構造を学ぶためのサンプルアプリ</p>
+        </footer>
+    </div>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

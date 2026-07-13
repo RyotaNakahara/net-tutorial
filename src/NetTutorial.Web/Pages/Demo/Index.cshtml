@@ -1,0 +1,39 @@
+@page
+@model NetTutorial.Web.Pages.Demo.IndexModel
+@{
+    ViewData["Title"] = "デモ";
+}
+
+<section class="page-header">
+    <h1>クラスライブラリ呼び出しデモ</h1>
+    <p>
+        このページは Web プロジェクトから Core プロジェクトの <code>Greeter</code> クラスを呼び出します。
+        プロジェクト参照の意味を、動かしながら確認できます。
+    </p>
+</section>
+
+<section class="section demo-panel">
+    <form method="post" class="demo-form">
+        <label for="Name">お名前</label>
+        <input id="Name" asp-for="Name" maxlength="40" autocomplete="name" />
+        <button type="submit" class="btn btn-primary">あいさつを生成</button>
+    </form>
+
+    @if (Model.Submitted)
+    {
+        <div class="demo-result">
+            <p class="result-main">@Model.Greeting</p>
+            <p>@Model.Description</p>
+        </div>
+    }
+</section>
+
+<section class="section">
+    <h2>ここでのポイント</h2>
+    <ul class="plain-list">
+        <li><code>NetTutorial.Web</code> が <code>NetTutorial.Core</code> をプロジェクト参照している</li>
+        <li><code>using NetTutorial.Core.Demos;</code> でクラスを利用できる</li>
+        <li>フォーム送信は Razor Pages の <code>OnPost</code> ハンドラで処理している</li>
+        <li>レッスン数は DI された <code>ILessonService</code> から取得している</li>
+    </ul>
+</section>
