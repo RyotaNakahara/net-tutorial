@@ -630,6 +630,73 @@ td {
   color: var(--muted);
 }
 
+.setup-steps {
+  display: grid;
+  gap: 1rem;
+  margin: 1.5rem 0 2rem;
+}
+
+.setup-step {
+  padding: 1.25rem 1.3rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.015));
+  box-shadow: var(--shadow);
+}
+
+.setup-step-head {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+}
+
+.setup-step-head h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.2rem;
+}
+
+.setup-step-head p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.setup-num {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 8px;
+  background: linear-gradient(145deg, var(--dotnet-purple-soft), var(--dotnet-purple));
+  color: white;
+  font-weight: 700;
+  font-family: var(--mono);
+  font-size: 0.95rem;
+  box-shadow: 0 8px 20px rgba(81, 43, 212, 0.35);
+}
+
+.setup-note {
+  margin: 0.75rem 0 0;
+  padding: 0.75rem 0.9rem;
+  border-radius: 8px;
+  background: rgba(81, 43, 212, 0.18);
+  border: 1px solid rgba(124, 92, 255, 0.3);
+  color: #ddd7ff;
+  font-size: 0.95rem;
+}
+
+.highlight .btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.highlight .highlight-ghost {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.35);
+  color: white;
+}
+
 @keyframes rise {
   from {
     opacity: 0;

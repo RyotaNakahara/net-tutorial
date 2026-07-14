@@ -1,0 +1,91 @@
+@page
+@model NetTutorial.Web.Pages.Setup.IndexModel
+@{
+    ViewData["Title"] = "環境構築";
+}
+
+<section class="page-header">
+    <p class="eyebrow">Getting Started</p>
+    <h1>ローカル環境構築手順書</h1>
+    <p>
+        この NetTutorial プロジェクトは使いません。
+        空の PC にツールを入れ、<code>dotnet new</code> で新規 Web アプリを作り、ブラウザで .NET の初期画面（または Hello World）を表示するまでの手順です。
+    </p>
+</section>
+
+<section class="section setup-overview">
+    <h2>所要時間の目安</h2>
+    <p class="section-lead">初めての場合は 15〜30 分程度です（ダウンロード速度により変動します）。</p>
+    <div class="feature-grid">
+        <article class="feature">
+            <h3>想定する出発点</h3>
+            <p>開発ツール未導入の PC。学習用リポジトリも使わない</p>
+        </article>
+        <article class="feature">
+            <h3>ゴール</h3>
+            <p><code>dotnet new webapp</code> で作ったアプリを起動し、ブラウザに Welcome 初期画面（または Hello World）が出ること</p>
+        </article>
+    </div>
+</section>
+
+<div class="setup-steps">
+    @foreach (var step in Model.Steps)
+    {
+        <section class="setup-step" id="step-@step.Number">
+            <div class="setup-step-head">
+                <span class="setup-num">@step.Number</span>
+                <div>
+                    <h2>@step.Title</h2>
+                    <p>@step.Summary</p>
+                </div>
+            </div>
+
+            @if (step.Bullets is { Count: > 0 })
+            {
+                <ul class="plain-list">
+                    @foreach (var bullet in step.Bullets)
+                    {
+                        <li>@bullet</li>
+                    }
+                </ul>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(step.Code))
+            {
+                <pre class="code-block"><code>@step.Code.Trim()</code></pre>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(step.Note))
+            {
+                <p class="setup-note">@step.Note</p>
+            }
+        </section>
+    }
+</div>
+
+<section class="section">
+    <h2>困ったとき</h2>
+    <div class="structure-list">
+        @foreach (var item in Model.Troubleshooting)
+        {
+            <article class="structure-item">
+                <strong>@item.Title</strong>
+                <p>@item.Detail</p>
+            </article>
+        }
+    </div>
+</section>
+
+<section class="section highlight">
+    <div>
+        <h2>環境ができたら</h2>
+        <p>
+            初期画面が出ればローカル環境は整っています。
+            そのあとにこの NetTutorial で .NET の構成や構文を学ぶ、という進め方でも構いません。
+        </p>
+    </div>
+    <div class="cta-row">
+        <a class="btn btn-primary" asp-page="/Lessons/Index">レッスン一覧へ</a>
+        <a class="btn btn-ghost highlight-ghost" asp-page="/Structure/Index">構成ガイドへ</a>
+    </div>
+</section>
