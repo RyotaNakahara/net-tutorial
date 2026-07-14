@@ -19,7 +19,8 @@ public class IndexModel : PageModel
                 "インターネット接続",
                 "ターミナル（macOS: Terminal / Windows: PowerShell や Windows Terminal）",
                 "ブラウザ（Chrome / Edge / Safari など）",
-                "Visual Studio Code（次の手順でインストール）"
+                "Visual Studio Code（次の手順でインストール）",
+                "PostgreSQL（DB 連携する場合。手順 11 以降）"
             ],
             null,
             "ここでのゴールは「空の PC から、自分で作った .NET Web アプリをブラウザで開く」ことです。この NetTutorial フォルダは使いません。"),
@@ -96,32 +97,99 @@ public class IndexModel : PageModel
             dotnet new webapp -n HelloDotNet -o HelloDotNet
             cd HelloDotNet
             """,
-            "`dotnet new webapp` は公式テンプレートです。後でブラウザに表示されるのは、このテンプレート標準の初期画面です。"),
+            "`dotnet new webapp` は最小構成です。NetTutorial のように Web + Core に分けた構成を CLI で作る場合は、手順 6 へ進んでください。"),
         new(
             "6",
-            "VS Code で開く",
-            "いま作ったプロジェクトフォルダを VS Code で開きます。",
-            null,
+            "（任意・発展）CLI で NetTutorial 型の構成を作る",
+            "`dotnet new webapp` 1 本ではなく、ソリューション + Web プロジェクト + クラスライブラリの 3 層構成を CLI だけで作ります。NetTutorial と同じ「骨組み」まで自動化できます。",
+            [
+                "MyApp.sln … ソリューション（全体の入れ物）",
+                "src/MyApp.Web … Razor Pages の Web アプリ（画面・Program.cs）",
+                "src/MyApp.Core … クラスライブラリ（Models / Services など再利用ロジック）",
+                "Web → Core のプロジェクト参照で、画面から Core のクラスを呼び出せる"
+            ],
             """
-            # HelloDotNet フォルダにいる状態で
-            code .
+            # 作業用ディレクトリへ（手順 5 で HelloDotNet を作った場合は別名にする）
+            mkdir -p ~/Projects
+            cd ~/Projects
 
-            # または VS Code の「ファイル」→「フォルダーを開く…」で HelloDotNet を選択
+            # 1) ソリューション作成
+            dotnet new sln -n MyApp
+
+            # 2) Web / Core プロジェクト作成
+            dotnet new webapp -n MyApp.Web -o src/MyApp.Web
+            dotnet new classlib -n MyApp.Core -o src/MyApp.Core
+
+            # 3) ソリューションへ登録
+            dotnet sln add src/MyApp.Web/MyApp.Web.csproj
+            dotnet sln add src/MyApp.Core/MyApp.Core.csproj
+
+            # 4) Web から Core を参照（NetTutorial と同じ関係）
+            dotnet add src/MyApp.Web/MyApp.Web.csproj reference src/MyApp.Core/MyApp.Core.csproj
+
+            # 5) Core 側のフォルダ構成（CLI では mkdir）
+            mkdir -p src/MyApp.Core/Models
+            mkdir -p src/MyApp.Core/Services
+
+            # 6) テンプレート既定の Class1.cs を削除
+            rm src/MyApp.Core/Class1.cs
+
+            # 7) ルート（MyApp.sln がある場所）でビルド確認
+            dotnet build
             """,
-            "C# Dev Kit の通知が出たら、ソリューション / プロジェクトの読み込みに従ってください。"),
+            """
+            完成イメージ:
+            MyApp/
+            ├── MyApp.sln
+            └── src/
+                ├── MyApp.Core/
+                │   ├── Models/
+                │   └── Services/
+                └── MyApp.Web/
+                    ├── Pages/
+                    ├── Program.cs
+                    └── wwwroot/
+
+            Pages の追加・DI 登録・デザイン・DB 連携は CLI では作れません。NetTutorial のレッスン画面のような中身は、この骨組みの上に手動で足していきます。
+            """),
         new(
             "7",
-            "ビルドして起動する",
-            "コンパイルできることを確認し、ローカルサーバーを起動します。",
+            "VS Code で開く",
+            "作ったプロジェクトを VS Code で開きます。",
             null,
             """
-            # VS Code のターミナルで（プロジェクト直下）
-            dotnet build
-            dotnet run
+            # 最小構成（手順 5）の場合
+            cd ~/Projects/HelloDotNet
+            code .
+
+            # NetTutorial 型（手順 6）の場合 — ソリューションのルートを開く
+            cd ~/Projects/MyApp
+            code .
             """,
-            "成功すると `Now listening on: http://localhost:5xxx`（または https）のような URL が表示されます。止めるときは Ctrl+C です。"),
+            "手順 6 の場合は `.sln` があるフォルダを開いてください。C# Dev Kit がソリューションを検出したら読み込みます。"),
         new(
             "8",
+            "ビルドして起動する",
+            "コンパイルできることを確認し、Web プロジェクトを起動します。",
+            null,
+            """
+            # --- 最小構成（HelloDotNet）---
+            cd ~/Projects/HelloDotNet
+            dotnet build
+            dotnet run
+
+            # --- NetTutorial 型（MyApp）---
+            cd ~/Projects/MyApp
+            dotnet build                              # ルート（.sln）から全体ビルド
+            cd src/MyApp.Web
+            dotnet run --launch-profile http
+
+            # 変更を監視して再起動
+            dotnet watch run --launch-profile http
+            """,
+            "NetTutorial 型では `dotnet run` は Web プロジェクト（src/MyApp.Web）で実行します。ルートの `dotnet build` はソリューション全体をビルドします。"),
+        new(
+            "9",
             "ブラウザで初期画面を確認する",
             "ターミナルに出た URL をブラウザで開きます。テンプレート標準のホームが表示されれば環境構築は成功です。",
             [
@@ -130,9 +198,9 @@ public class IndexModel : PageModel
                 "フッターに © と Privacy へのリンク"
             ],
             null,
-            "これが .NET（ASP.NET Core Web アプリ）の初期画面です。見えたら SDK・CLI・実行環境は一通り揃っています。"),
+            "手順 5 でも 6 でも、Web テンプレートの初期画面は同じです。NetTutorial 型は中身（Pages / Services）を足していく段階からが本番開発です。"),
         new(
-            "9",
+            "10",
             "（任意）Hello World だけにする",
             "初期画面の代わりに、最小の Hello World だけ出したい場合の例です。",
             [
@@ -150,7 +218,131 @@ public class IndexModel : PageModel
             <h1>Hello, World!</h1>
             <p>.NET の環境構築に成功しました。</p>
             """,
-            "レイアウト（ナビやフッター）はそのまま残ることがあります。それも消したい場合は Shared/_Layout.cshtml を簡略化してください。")
+            "レイアウト（ナビやフッター）はそのまま残ることがあります。それも消したい場合は Shared/_Layout.cshtml を簡略化してください。"),
+        new(
+            "11",
+            "PostgreSQL をインストールする",
+            ".NET アプリから使うデータベースとして PostgreSQL を入れます（DB 連携が不要ならスキップ可）。",
+            [
+                "macOS（Homebrew）: `brew install postgresql@16` → `brew services start postgresql@16`",
+                "Windows: https://www.postgresql.org/download/windows/ のインストーラ（インストール時にパスワードを控える）",
+                "Linux（例: Ubuntu）: `sudo apt install postgresql postgresql-contrib` のあとサービス起動"
+            ],
+            """
+            # インストール後、バージョン確認（パスは環境により異なる）
+            psql --version
+
+            # macOS（Homebrew）でクライアントに PATH を通す例
+            echo 'export PATH="$(brew --prefix postgresql@16)/bin:$PATH"' >> ~/.zshrc
+            source ~/.zshrc
+            """,
+            "GUI が欲しい場合は pgAdmin や TablePlus、VS Code 拡張「PostgreSQL」（Microsoft / ID: ms-ossdata.vscode-postgresql）も便利です。"),
+        new(
+            "12",
+            "データベースを作成する",
+            "アプリ専用の DB を用意します。名前やユーザーは任意ですが、以降の接続文字列と揃えてください。",
+            null,
+            """
+            # 対話シェルを開く（macOS では現在の OS ユーザーで入れることが多い）
+            psql postgres
+
+            # psql 内で実行
+            CREATE DATABASE hellodotnet;
+            \\l                  -- DB 一覧で hellodotnet があるか確認
+            \\q                  -- 終了
+
+            # 接続確認
+            psql -d hellodotnet -c "SELECT version();"
+            """,
+            "Windows ではインストール時に決めた `postgres` ユーザー／パスワードで `psql -U postgres` とします。認証エラー時はパスワードや `pg_hba.conf` を確認してください。"),
+        new(
+            "13",
+            ".NET に PostgreSQL 用パッケージを入れる",
+            "Web プロジェクトで Entity Framework Core 経由で PostgreSQL につなぎます。",
+            null,
+            """
+            # --- 最小構成 ---
+            cd ~/Projects/HelloDotNet
+
+            # --- NetTutorial 型 ---
+            cd ~/Projects/MyApp/src/MyApp.Web
+
+            # EF Core の PostgreSQL プロバイダ（.csproj がある Web プロジェクトで実行）
+            dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL
+
+            # マイグレーション用ツール（初回のみグローバル）
+            dotnet tool install --global dotnet-ef
+            """,
+            """
+            dotnet ef が見つからない場合は、シェルを開き直すか次を実行してください:
+            export PATH="$PATH:$HOME/.dotnet/tools"
+            """),
+        new(
+            "14",
+            "接続文字列と DbContext を設定する",
+            "`appsettings.json` に接続情報を書き、Program.cs で DI 登録します。",
+            [
+                "appsettings.json に ConnectionStrings を追加する（Web プロジェクト側）",
+                "Models/AppDbContext.cs を作成する（最小構成は Web/Models、NetTutorial 型は Core/Models でも可）",
+                "Program.cs で AddDbContext する"
+            ],
+            """
+            // --- appsettings.json（抜粋）---
+            {
+              "ConnectionStrings": {
+                "DefaultConnection": "Host=localhost;Port=5432;Database=hellodotnet;Username=YOUR_USER;Password=YOUR_PASSWORD"
+              }
+            }
+
+            // --- Models/AppDbContext.cs ---
+            using Microsoft.EntityFrameworkCore;
+
+            public class AppDbContext : DbContext
+            {
+                public AppDbContext(DbContextOptions<AppDbContext> options)
+                    : base(options)
+                {
+                }
+
+                // 例: public DbSet<TodoItem> TodoItems => Set<TodoItem>();
+            }
+
+            // --- Program.cs（builder.Services 付近に追加）---
+            builder.Services.AddDbContext<AppDbContext>(options =>
+                options.UseNpgsql(
+                    builder.Configuration.GetConnectionString("DefaultConnection")));
+            """,
+            "Username は macOS では OS のログイン名、Windows では多くの場合 `postgres` です。パスワードが無い構成なら `Password=` を省略できることがあります。接続文字列にパスワードを書く場合、本番では環境変数やシークレットに退避してください。"),
+        new(
+            "15",
+            "接続できるか確認する",
+            "起動時に DB へ一度つなぐ処理を入れて、エラーが出ないか確認します。",
+            [
+                "Program.cs の `var app = builder.Build();` の直後などに、スコープを取って Database.CanConnect() を呼ぶ（下の例）",
+                "`dotnet run` で起動し、ターミナルに「PostgreSQL OK」などと出れば接続成功",
+                "失敗したら接続文字列・PostgreSQL サービス起動・ファイアウォールを確認"
+            ],
+            """
+            // Program.cs（app 作成直後の例）
+            using (var scope = app.Services.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                if (db.Database.CanConnect())
+                {
+                    Console.WriteLine("PostgreSQL OK: 接続できました");
+                }
+                else
+                {
+                    Console.WriteLine("PostgreSQL NG: 接続できません");
+                }
+            }
+
+            // テーブルをマイグレーションで作る場合の例（モデル追加後）
+            // dotnet add package Microsoft.EntityFrameworkCore.Design
+            // dotnet ef migrations add InitialCreate
+            // dotnet ef database update
+            """,
+            "ここまでできれば「.NET ↔ PostgreSQL」の基本連携は完了です。CRUD やマイグレーションは、このあとの学習ステップとして拡張できます。")
     ];
 
     public IReadOnlyList<TroubleItem> Troubleshooting { get; } =
@@ -169,7 +361,19 @@ public class IndexModel : PageModel
             "別の `dotnet run` が残っていないか確認し、Ctrl+C で止めるか別ポートを指定します。"),
         new(
             "ビルドや起動に失敗する",
-            "作業ディレクトリが `HelloDotNet`（.csproj がある場所）か確認し、`dotnet build` のエラーメッセージを読んで対処します。")
+            "最小構成なら `.csproj` があるフォルダ、NetTutorial 型なら `dotnet build` は `.sln` があるルート、`dotnet run` は `src/MyApp.Web` で実行しているか確認します。"),
+        new(
+            "プロジェクト参照エラー（Core が見つからない）",
+            "手順 6 の `dotnet add ... reference ...` を実行したか、VS Code で `.sln` を開いているか確認します。Core にクラスを追加したら `using MyApp.Core.Models;` など名前空間を合わせます。"),
+        new(
+            "psql コマンドが見つからない",
+            "PostgreSQL の bin に PATH が通っているか確認します。macOS（Homebrew）なら `brew --prefix postgresql@16`/bin を PATH に追加してください。"),
+        new(
+            "PostgreSQL に接続できない",
+            "サービスが起動しているか（`brew services list` や Windows のサービス）、Host/Port/Database/Username/Password が正しいか、`psql -d hellodotnet` 単体でつながるかを確認します。"),
+        new(
+            "UseNpgsql / AppDbContext が見つからない",
+            "`dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL` を実行したか、`using Microsoft.EntityFrameworkCore;` と名前空間を確認し、ビルドし直してください。")
     ];
 
     public record SetupStep(

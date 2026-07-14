@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model IndexModel
 @{
     ViewData["Title"] = "ホーム";
@@ -38,7 +38,7 @@
         </article>
         <article class="feature">
             <h3>プロジェクト構成</h3>
-            <p>ソリューション、.csproj、Pages、クラスライブラリの役割分担を体験します。</p>
+            <p>ソリューション、.csproj、Pages、クラスライブラリの役割分担を体験します。<a asp-page="/Architecture/Index">大規模向けの伸ばし方</a>も案内します。</p>
         </article>
         <article class="feature">
             <h3>C# の基本構文</h3>
@@ -48,6 +48,16 @@
             <h3>ASP.NET Core</h3>
             <p>Program.cs、DI、ミドルウェア、Razor Pages の対応関係を理解します。</p>
         </article>
+    </div>
+</section>
+
+<section class="section">
+    <div class="demo-panel" style="margin-top: 0;">
+        <h2 style="margin-top: 0;">100画面を超える場合は？</h2>
+        <p>
+            学習用の Core + Web から、機能モジュール分割（Modular Monolith）へ伸ばす考え方をまとめています。
+        </p>
+        <a class="btn btn-primary" asp-page="/Architecture/Index">大規模向け構成を見る</a>
     </div>
 </section>
 

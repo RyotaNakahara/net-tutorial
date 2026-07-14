@@ -9,21 +9,25 @@
     <h1>ローカル環境構築手順書</h1>
     <p>
         この NetTutorial プロジェクトは使いません。
-        空の PC にツールを入れ、<code>dotnet new</code> で新規 Web アプリを作り、ブラウザで .NET の初期画面（または Hello World）を表示するまでの手順です。
+        空の PC にツールを入れ、<code>dotnet new</code> で新規 Web アプリを作り、
+        必要なら CLI で NetTutorial 型のソリューション構成（Web + Core）も作れます。
+        ブラウザで初期画面を確認し、任意で PostgreSQL と連携する手順です。
     </p>
 </section>
 
 <section class="section setup-overview">
     <h2>所要時間の目安</h2>
-    <p class="section-lead">初めての場合は 15〜30 分程度です（ダウンロード速度により変動します）。</p>
+    <p class="section-lead">
+        .NET の起動まで 15〜30 分、NetTutorial 型の CLI 構成は +10 分、PostgreSQL 連携は +15〜30 分程度です。
+    </p>
     <div class="feature-grid">
         <article class="feature">
-            <h3>想定する出発点</h3>
-            <p>開発ツール未導入の PC。学習用リポジトリも使わない</p>
+            <h3>2 つの作り方</h3>
+            <p>手順 5: 最小の webapp 1 本 / 手順 6: sln + Web + Core（NetTutorial 型の骨組み）</p>
         </article>
         <article class="feature">
             <h3>ゴール</h3>
-            <p><code>dotnet new webapp</code> で作ったアプリを起動し、ブラウザに Welcome 初期画面（または Hello World）が出ること</p>
+            <p>Welcome / Hello World の表示、任意で PostgreSQL 接続、NetTutorial 型なら 2 プロジェクト構成まで</p>
         </article>
     </div>
 </section>
@@ -80,8 +84,9 @@
     <div>
         <h2>環境ができたら</h2>
         <p>
-            初期画面が出ればローカル環境は整っています。
-            そのあとにこの NetTutorial で .NET の構成や構文を学ぶ、という進め方でも構いません。
+            初期画面が出ればローカルの .NET 環境は整っています。
+            PostgreSQL まで進めれば、アプリから DB につなぐ土台もできます。
+            そのあとにこの NetTutorial で構成や構文を学ぶ進め方でも構いません。
         </p>
     </div>
     <div class="cta-row">

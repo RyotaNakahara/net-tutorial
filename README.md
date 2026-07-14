@@ -52,6 +52,7 @@ dotnet watch run
 | `/Lessons` | レッスン一覧（カテゴリ絞り込み可） |
 | `/Lessons/{id}` | レッスン詳細（構文説明・コード例） |
 | `/Structure` | ソリューション構成ガイド |
+| `/Architecture` | 大規模向けディレクトリ構成（Modular Monolith） |
 | `/Demo` | Core の `Greeter` を呼び出すデモ |
 
 起動後、ナビゲーションの「環境構築」または `/Setup` でも同じ手順を閲覧できます。
@@ -60,9 +61,10 @@ dotnet watch run
 
 1. アプリを起動し、画面からレッスンを読む
 2. 「構成ガイド」でフォルダ役割を確認する
-3. `Program.cs` → `Pages` → `LessonService` の順にソースを読む
-4. 「デモ」で Web → Core の呼び出しを体験する
-5. 新しいレッスンやプロパティを追加してみる
+3. 「大規模構成」で 100 画面超向けの Modular Monolith を読む
+4. `Program.cs` → `Pages` → `LessonService` の順にソースを読む
+5. 「デモ」で Web → Core の呼び出しを体験する
+6. 新しいレッスンやプロパティを追加してみる
 
 ## よく使うコマンド
 

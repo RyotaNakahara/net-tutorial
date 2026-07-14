@@ -1,0 +1,238 @@
+@page
+@model NetTutorial.Web.Pages.Architecture.IndexModel
+@{
+    ViewData["Title"] = "大規模向け構成";
+}
+
+<section class="page-header">
+    <p class="eyebrow">Scale Architecture</p>
+    <h1>大規模開発のフォルダ分け（やさしい版）</h1>
+    <p>
+        専門用語は後回しで大丈夫です。
+        まずは「画面が増えたとき、どう探すか・どう直すか」の話として読みましょう。
+    </p>
+</section>
+
+<section class="section">
+    <h2>30秒でわかる結論</h2>
+    <div class="setup-note" style="margin: 0;">
+        100画面を超えるなら、<strong>「画面用」「サービス用」で切るより、「注文」「顧客」など機能で切る</strong>。
+        アプリは1つのまま、中だけ部署分けするイメージです。
+    </div>
+</section>
+
+<section class="section">
+    <h2>そもそも何が困るの？</h2>
+    <p class="section-lead">
+        今の NetTutorial は <code>Core</code> + <code>Web</code> で十分わかりやすいです。
+        でも画面が何十・何百になると、こんなことが起きます。
+    </p>
+    <div class="feature-grid">
+        @foreach (var idea in Model.CoreIdeas)
+        {
+            <article class="feature">
+                <h3>@idea.Title</h3>
+                <p>@idea.Body</p>
+            </article>
+        }
+    </div>
+    <p style="margin-top: 1rem;">
+        <a asp-page="/Structure/Index">いまの学習用構成ガイド →</a>
+    </p>
+</section>
+
+<section class="section">
+    <h2>たとえ話：会社の部署分け</h2>
+    <p class="section-lead">フォルダ構成を、オフィスに例えるとこうなります。</p>
+    <div class="structure-list">
+        <article class="structure-item">
+            <code>悪い例：書類の種類で部屋分け</code>
+            <p>
+                「画面の紙」「計算の紙」「DBの紙」で部屋を分けると、
+                注文を直すたびに3部屋を行き来します。画面が100枚あると迷子になります。
+            </p>
+        </article>
+        <article class="structure-item">
+            <code>よい例：業務で部屋分け</code>
+            <p>
+                「注文部」「顧客部」「請求部」のように分ける。
+                注文を直すなら注文部の部屋だけ見ればよい、という状態を目指します。
+            </p>
+        </article>
+    </div>
+</section>
+
+<section class="section">
+    <h2>かんたんな地図（最初はこれでOK）</h2>
+    <p class="section-lead">いきなり全部やらなくて大丈夫。まずは「機能ごとの部屋」がある、という形をイメージします。</p>
+    <pre class="tree" aria-label="かんたんな大規模向けツリー">
+アプリ（1つ）
+├── 共通の文房具置き場     BuildingBlocks
+├── 注文の部屋             Modules/Orders
+├── 顧客の部屋             Modules/Customers
+├── 請求の部屋             Modules/Billing
+└── 玄関・受付             Host（起動やルーティング）
+    </pre>
+</section>
+
+<section class="section">
+    <h2>もう少し具体的なフォルダ例</h2>
+    <p class="section-lead">実際のプロジェクトだと、だいたいこんな並びになります（名前は例です）。</p>
+    <pre class="tree" aria-label="大規模向けプロジェクトツリー">
+src/
+├── BuildingBlocks/              ← みんなで使う共通部品
+├── Modules/
+│   ├── Orders/                  ← 注文の部屋
+│   │   ├── Domain/              ← ルール
+│   │   ├── Application/         ← 作業の手順
+│   │   ├── Infrastructure/      ← DB・外部接続
+│   │   └── Web/                 ← 画面
+│   │       ├── List/
+│   │       ├── Details/
+│   │       └── Cancel/
+│   ├── Customers/
+│   └── Billing/
+└── Host/                        ← 玄関（起動・組み立て）
+
+tests/
+├── Orders.Tests/                ← 注文の確認
+└── Customers.Tests/
+    </pre>
+</section>
+
+<section class="section">
+    <h2>各フォルダを日本語で言うと</h2>
+    <div class="structure-list">
+        @foreach (var item in Model.FolderItems)
+        {
+            <article class="structure-item">
+                <code>@item.Path</code>
+                <p>@item.Description</p>
+            </article>
+        }
+    </div>
+</section>
+
+<section class="section">
+    <h2>「技術で分けるだけ」だと足りない理由</h2>
+    <p class="section-lead">
+        Domain / Application / Web のように層で分けるやり方自体は悪いわけではありません。
+        ただし、画面フォルダだけが巨大化すると、探すのが大変になります。
+    </p>
+    <pre class="tree" aria-label="レイヤーのみの問題例">
+Web/
+└── Pages/
+    ├── 注文一覧.cshtml
+    ├── 注文詳細.cshtml
+    ├── 顧客一覧.cshtml
+    ├── 請求作成.cshtml
+    └── ...（100ファイル）   ← ここがつらい
+    </pre>
+    <p class="setup-note">
+        コツはセットで使うこと。<strong>外は機能で分け、部屋の中は必要なら層で分ける</strong>。
+    </p>
+</section>
+
+<section class="section">
+    <h2>どちらが楽か（比較）</h2>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>観点</th>
+                    <th>技術フォルダだけ</th>
+                    <th>機能で部屋分け</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var row in Model.CompareRows)
+                {
+                    <tr>
+                        <td>@row.Aspect</td>
+                        <td>@row.LayerOnly</td>
+                        <td>@row.Modular</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="section">
+    <h2>画面の置き方のコツ</h2>
+    <div class="feature-grid">
+        <article class="feature">
+            <h3>まとまりで置く</h3>
+            <p>注文の一覧・詳細・キャンセルは、同じ「注文」の近くへ。</p>
+        </article>
+        <article class="feature">
+            <h3>関係あるコードを隣に</h3>
+            <p>画面・チェック・その機能だけの処理は、できるだけ同じ部屋に。</p>
+        </article>
+        <article class="feature">
+            <h3>共通は本当に共通なものだけ</h3>
+            <p>ヘッダーやログイン部品など。迷ったら機能側に置く。</p>
+        </article>
+        <article class="feature">
+            <h3>他の部屋の中身は触らない</h3>
+            <p>どうしても必要なら、決まった窓口経由でやり取りする。</p>
+        </article>
+    </div>
+</section>
+
+<section class="section">
+    <h2>NetTutorial から育てる4ステップ</h2>
+    <p class="section-lead">いきなり理想形を作らなくて大丈夫。今の構成から順に伸ばせます。</p>
+    <div class="setup-steps">
+        @foreach (var step in Model.GrowthSteps)
+        {
+            <article class="setup-step">
+                <div class="setup-step-head">
+                    <span class="setup-num">@step.Number</span>
+                    <div>
+                        <h2>@step.Title</h2>
+                        <p>@step.Description</p>
+                    </div>
+                </div>
+            </article>
+        }
+    </div>
+</section>
+
+<section class="section">
+    <h2>やりがちだけど避けたいこと</h2>
+    <div class="structure-list">
+        @foreach (var item in Model.Pitfalls)
+        {
+            <article class="structure-item">
+                <code>@item.Title</code>
+                <p>@item.Description</p>
+            </article>
+        }
+    </div>
+</section>
+
+<section class="section">
+    <h2>用語ミニ辞典（後で読めばOK）</h2>
+    <p class="section-lead">英語の名前が出てきても、意味は上で話した内容と同じです。</p>
+    <div class="structure-list">
+        @foreach (var term in Model.Terms)
+        {
+            <article class="structure-item">
+                <code>@term.Name</code>
+                <p>@term.Meaning</p>
+            </article>
+        }
+    </div>
+</section>
+
+<section class="section highlight">
+    <div>
+        <h2>覚え方はこの1文</h2>
+        <p>
+            画面が増えたら「技術の引き出し」ではなく「業務の部屋」で分ける。
+            アプリは1つのまま、中だけ部署分けする。
+        </p>
+    </div>
+    <a class="btn btn-primary" asp-page="/Structure/Index">いまの構成へ</a>
+</section>
