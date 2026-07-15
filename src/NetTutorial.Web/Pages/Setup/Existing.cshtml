@@ -1,0 +1,95 @@
+@page
+@model NetTutorial.Web.Pages.Setup.ExistingModel
+@{
+    ViewData["Title"] = "既存ソースの環境構築";
+}
+
+<section class="page-header">
+    <p class="eyebrow">Existing Project</p>
+    <h1>既存ソースを使う環境構築手順</h1>
+    <p>
+        すでにあるプロジェクト（この NetTutorial や社内リポジトリなど）を、
+        手元の PC で clone・ビルド・起動する手順です。
+        新規に <code>dotnet new</code> で作る場合は
+        <a asp-page="/Setup/Index">環境構築ページ</a>を参照してください。
+    </p>
+</section>
+
+<section class="section setup-overview">
+    <h2>所要時間の目安</h2>
+    <p class="section-lead">
+        ソース取得から起動まで 10〜20 分程度です。SDK 未導入の PC なら +15 分ほどかかります。
+    </p>
+    <div class="feature-grid">
+        <article class="feature">
+            <h3>対象</h3>
+            <p>Git で clone したプロジェクト、ZIP で受け取ったフォルダ、すでに手元にある NetTutorial</p>
+        </article>
+        <article class="feature">
+            <h3>ゴール</h3>
+            <p><code>dotnet build</code> が通り、Web プロジェクトを <code>dotnet run</code> でブラウザ表示できること</p>
+        </article>
+    </div>
+</section>
+
+<div class="setup-steps">
+    @foreach (var step in Model.Steps)
+    {
+        <section class="setup-step" id="step-@step.Number">
+            <div class="setup-step-head">
+                <span class="setup-num">@step.Number</span>
+                <div>
+                    <h2>@step.Title</h2>
+                    <p>@step.Summary</p>
+                </div>
+            </div>
+
+            @if (step.Bullets is { Count: > 0 })
+            {
+                <ul class="plain-list">
+                    @foreach (var bullet in step.Bullets)
+                    {
+                        <li>@bullet</li>
+                    }
+                </ul>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(step.Code))
+            {
+                <pre class="code-block"><code>@step.Code.Trim()</code></pre>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(step.Note))
+            {
+                <p class="setup-note">@step.Note</p>
+            }
+        </section>
+    }
+</div>
+
+<section class="section">
+    <h2>困ったとき</h2>
+    <div class="structure-list">
+        @foreach (var item in Model.Troubleshooting)
+        {
+            <article class="structure-item">
+                <strong>@item.Title</strong>
+                <p>@item.Detail</p>
+            </article>
+        }
+    </div>
+</section>
+
+<section class="section highlight">
+    <div>
+        <h2>起動できたら</h2>
+        <p>
+            既存プロジェクトが動けば、あとはソースを読んだり機能を足したりする段階です。
+            NetTutorial ならレッスンや構成ガイドから学習を進められます。
+        </p>
+    </div>
+    <div class="cta-row">
+        <a class="btn btn-primary" asp-page="/Lessons/Index">レッスン一覧へ</a>
+        <a class="btn btn-ghost highlight-ghost" asp-page="/Setup/Index">新規作成の手順へ</a>
+    </div>
+</section>

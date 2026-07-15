@@ -258,8 +258,12 @@ public class IndexModel : PageModel
         new(
             "13",
             ".NET に PostgreSQL 用パッケージを入れる",
-            "Web プロジェクトで Entity Framework Core 経由で PostgreSQL につなぎます。",
-            null,
+            "Web プロジェクトで Entity Framework Core 経由で PostgreSQL につなぎます。これは「新規に自分で作ったプロジェクト」向けです。",
+            [
+                "既存のソースを動かすだけなら、この手順は通常不要です",
+                "既存プロジェクトではパッケージは .csproj に既に書かれており、`dotnet restore` / `dotnet build` で取得されます",
+                "既存ソースの手順は「既存ソースの環境構築」ページを参照してください"
+            ],
             """
             # --- 最小構成 ---
             cd ~/Projects/HelloDotNet
@@ -274,6 +278,8 @@ public class IndexModel : PageModel
             dotnet tool install --global dotnet-ef
             """,
             """
+            既存リポジトリを手元で動かす場合は、パッケージ追加ではなく「PostgreSQL のインストール・DB 作成・接続文字列」が必要なことがあります（既存ソース手順の手順 10）。
+
             dotnet ef が見つからない場合は、シェルを開き直すか次を実行してください:
             export PATH="$PATH:$HOME/.dotnet/tools"
             """),

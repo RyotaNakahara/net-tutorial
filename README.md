@@ -49,6 +49,7 @@ dotnet watch run
 | --- | --- |
 | `/` | ホーム（アプリの紹介） |
 | `/Setup` | ローカル環境構築（`dotnet new webapp` で新規作成し初期画面を確認） |
+| `/Setup/Existing` | 既存ソースの環境構築（clone・ビルド・起動） |
 | `/Lessons` | レッスン一覧（カテゴリ絞り込み可） |
 | `/Lessons/{id}` | レッスン詳細（構文説明・コード例） |
 | `/Structure` | ソリューション構成ガイド |
